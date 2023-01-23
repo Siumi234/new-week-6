@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather app week 6</title>
+    <meta charset="UTF-8" />
+    <style>
+form {
+  margin: 20px;
+  border-radius: 5px;
+}
+body {
+  font-family: "Open Sans", sans-serif;
+}
+button {
+  font-size: 15px;
+  color: white;
+  background-color: #885df1;
+  border-radius: 5px;
+}
+h1 {
+  font-size: 50px;
+}
+h2 {
+  margin: 5px;
+}
+.sun-icon {
+  font-size: 50px;
+  color: orangered;
+}
+h3 {
+  font-size: 50px;
+  color: blue;
+}
+div {
+  font-size: 30px;
+  color: gray;
+}
+
+
+
+    </style>
+    
+    
+      
+      <script src="https://kit.fontawesome.com/290886e2a3.js" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+      <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+      <style> @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap'); </style>
+  </head>
+
+  <body>
+    
+    <form>
+      <input type="search" placeholder="Enter City" />
+      <button>search</button>
+      <button>Current city</button>
+    </form>
+    <h1>Milan</h1>
+    <h2>Thursday 16:00 </br>Partly cloudy</h2>
+    <h3>13°C
+    
+    <i class="fa-solid fa-sun sun-icon"></i>
+    </h3>
+    <div class="container">
+    <div class="row">
+      <div class="col-2">
+        Fri</br> <i class="fa-solid fa-cloud-rain"></i></br>9°
+      </div>
+      <div class="col-2">
+        Sat</br> <i class="fa-solid fa-cloud-rain"></i> </br>9°
+      </div>
+      <div class="col-2">
+        Sun</br> <i class="fa-solid fa-cloud"></i> </br>8°
+      </div>
+      <div class="col-2">
+        Mon</br> <i class="fa-solid fa-sun sunny"></i> </br>12°
+      </div>
+      <div class="col-2">
+        Tue</br><i class="fa-solid fa-sun sunny"></i> </br>11°
+      </div>
+    </div>
+    </div>
+
+    
+    
+
+    <script>function formatDate(date) {
+  let hours = date.getHours();
+  if (hours < 10) {
+    hours = `0${hours}`;
+  }
+  let minutes = date.getMinutes();
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+
+  let dayIndex = date.getDay();
+  let days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return `${day} ${hours}:${minutes}`;
+}
+function displayWeather(response) {
+  document.querySelector("#city").innerHTML = response.data.name;
+  document.querySelector("temperature").innerHTML = Math.round(
+    response.data.main.temp
+  );
+  document.querySelector("#description").innerHTML =
+    response.data.weather[0].main;
+}
+function searchCity(city) {
+  let apiKey = "f09d3949047ab6c9e3bcaf79cf61f619";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(displayWeather);
+}
+function handleSubmit(event) {
+  event.preventDefault();
+  let city = document.querySelector("#city-input");
+  searchCity();
+}
+function searchLocation(position) {
+  let apiKey = "f09d3949047ab6c9e3bcaf79cf61f619";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(displayWeather);
+}
+function getCurrentLocation(event) {
+  event.preventDefault();
+  navigator.geolocation.getCurrentPosition(searchLocation);
+}
+let dateElement = document.querySelector("#date");
+let currentTime = new Date();
+dateElement.innerHTML = formatDate(currentTime);
+
+let searchForm = document.querySelector("#search-form");
+searchForm.addEventListener("submit", handleSubmit);
+
+let currentLocationButtton = document.querySelector("#current-location-button");
+currentLocationButtton.addEventListener("click", getCurrentLocation);
+
+searchCity("Milan");
+     </script>
+  </body>
+</html>
